@@ -1,19 +1,51 @@
 import math
 
 def make_translate( x, y, z ):
-    pass
+    arr = new_matrix();
+    ident(arr);
+    arr[3][0] = x
+    arr[3][1] = y
+    arr[3][2] = z
+    return arr
 
 def make_scale( x, y, z ):
-    pass
+    arr = new_matrix()
+    ident(arr)
+    arr[0][0] = x
+    arr[1][1] = y
+    arr[2][2] = z
+    return arr
 
 def make_rotX( theta ):    
-    pass
+    radians = math.radians(theta);
+    arr = new_matrix()
+    ident(arr)
+    arr[1][1]=math.cos(radians)
+    arr[2][1]=-math.sin(radians)
+    arr[1][2]=math.sin(radians)
+    arr[2][2]=math.cos(radians)
+    return arr
+
 
 def make_rotY( theta ):
-    pass
+    radians = math.radians(theta);
+    arr = new_matrix()
+    ident(arr)
+    arr[0][0]=math.cos(radians)
+    arr[0][3]=-math.sin(radians)
+    arr[2][0]=math.sin(radians)
+    arr[2][3]=math.cos(radians)
+    return arr
 
 def make_rotZ( theta ):
-    pass
+    radians = math.radians(theta);
+    arr = new_matrix()
+    ident(arr)
+    arr[0][0]=math.cos(radians)
+    arr[1][0]=-math.sin(radians)
+    arr[0][1]=math.sin(radians)
+    arr[1][1]=math.cos(radians)
+    return arr
 
 def print_matrix( matrix ):
     s = ''
