@@ -16,33 +16,35 @@ def make_scale( x, y, z ):
     arr[2][2] = z
     return arr
 
+#takes in degrees
 def make_rotX( theta ):    
-    radians = math.radians(theta);
+    radians = math.radians(float(theta));
     arr = new_matrix()
     ident(arr)
     arr[1][1]=math.cos(radians)
-    arr[2][1]=-math.sin(radians)
+    arr[2][1]=-1 * math.sin(radians)
     arr[1][2]=math.sin(radians)
     arr[2][2]=math.cos(radians)
     return arr
 
-
+#takes in degrees
 def make_rotY( theta ):
-    radians = math.radians(theta);
+    radians = math.radians(float(theta));
     arr = new_matrix()
     ident(arr)
-    arr[0][0]=math.cos(radians)
-    arr[0][3]=-math.sin(radians)
-    arr[2][0]=math.sin(radians)
     arr[2][3]=math.cos(radians)
+    arr[0][3]= -1 * math.sin(radians)
+    arr[2][0]=math.sin(radians)
+    arr[0][0]=math.cos(radians)
     return arr
 
+#takes in degrees
 def make_rotZ( theta ):
-    radians = math.radians(theta);
+    radians = math.radians(float(theta));
     arr = new_matrix()
     ident(arr)
     arr[0][0]=math.cos(radians)
-    arr[1][0]=-math.sin(radians)
+    arr[1][0]= -1 * math.sin(radians)
     arr[0][1]=math.sin(radians)
     arr[1][1]=math.cos(radians)
     return arr
@@ -63,6 +65,11 @@ def ident( matrix ):
             else:
                 matrix[c][r] = 0
 
+def scalar_mult( matrix, s ):
+    for r in range( len( matrix[0] ) ):
+        for c in range( len(matrix) ):
+            matrix[c][r]*= s
+                
 #m1 * m2 -> m2
 def matrix_mult( m1, m2 ):
 

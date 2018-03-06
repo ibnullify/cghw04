@@ -33,41 +33,90 @@ See the file script for an example of the file format
 """
 
 def parse_file( fname, points, transform, screen, color ):
-    f = open(fname)
-    lines = f.readlines() 
+    points = new_matrix()
+    f = open(fname,'r')
+    lines = f.readlines()
     for i in range(len(lines)):
-        if lines[i]=="line\n":
-            params=lines[i+1].split(" ")
-            add_edge(points,int(params[0]),int(params[1]),int(params[2]),int(params[3]),int(params[4]),int(params[5]))
-        elif lines[i]=="ident\n":
+        #LINES
+        if (lines[i] == "line\n"):
+            coors = lines[i+1].split(" ")
+            x0 = int(coors[0])
+            y0 = int(coors[1])
+            z0 = int(coors[2])
+            x1 = int(coors[3])
+            y1 = int(coors[4])
+            z1 = int(coors[5])
+            add_edge(points, x0, y0, z0, x1, y1, z1)
+            print "---------------ADDED LINE-------------"
+            
+
+        #IDENT
+        elif (lines[i] == "ident\n"):
+            print "------------IDENTITY----------"
             ident(transform)
-        elif lines[i]=="scale\n":
-            params=lines[i+1].split(" ")
-            scale=make_scale(int(params[0]),int(params[1]),int(params[2]))
-            matrix_mult(scale,transform)
-        elif lines[i]=="move\n":
-            params=lines[i+1].split(" ")
-            translation=make_translate(int(params[0]),int(params[1]),int(params[2]))
-            matrix_mult(translation,transform)
-        elif lines[i]=="rotate\n":
-            params=lines[i+1].split(" ")
-            if params[0]=="x":
-                rotation=make_rotX(int(params[1]))
-            if params[0]=="y":
-                rotation=make_rotY(int(params[1]))
-            if params[0]=="z":
-                rotation=make_rotZ(int(params[1]))
-            matrix_mult(rotation,transform)
-        elif lines[i]=="apply\n":
-            matrix_mult(transform,points)
-        elif lines[i]=="display\n":
-            for p in range(len(points)):
-                for x in range(len(points[0])):
-                    points[p][x]=int(points[p][x])
+            print_matrix(transform)
+
+        #SCALE
+        elif (lines[i] == "scale\n"):
+            print "-----------SCALING-----------"
+            triple = lines[i+1].split(" ")
+            x = int(triple[0])
+            y = int(triple[1])
+            z = int(triple[2])
+            scale = make_scale(x, y, z)
+            matrix_mult(scale, transform)
+            print_matrix(transform)
+
+        #MOVE
+        elif (lines[i] == "move\n"):
+            print "------------MOVING-----------"
+            triple = lines[i+1].split(" ")
+            x = int(triple[0])
+            y = int(triple[1])
+            z = int(triple[2])
+            translate = make_translate(x, y, z)
+            matrix_mult(translate, transform)
+            print_matrix(transform)
+
+        #ROTATE
+        elif (lines[i] == "rotate\n"):
+            param = lines[i+1].split(" ")
+            direct = param[0]
+            angle = int(param[1])
+            if (direct == "x"):
+                print "-----------ROTATING BY X------------"
+                rotate = make_rotX(angle)
+            elif (direct == "y"):
+                print "-----------ROTATING BY Y------------"
+                rotate = make_rotY(angle)
+            else:
+                print "-----------ROTATING BY Z------------"
+                rotate = make_rotZ(angle)
+            matrix_mult(rotate, transform)
+            print_matrix(transform)
+
+        #APPLY
+        elif (lines[i] == "apply\n"):
+            print "----------------APPLYING--------------"
+            matrix_mult(transform, points)
+            #Integerize
+            for c in range(len(points)):
+                for r in range(len(points[0])):
+                    points[c][r] = int(points[c][r])
+            
+
+        #DISPLAY
+        elif (lines[i] == "display\n"):
             clear_screen(screen)
-            draw_lines(points,screen,color)
+            draw_lines(points, screen, color)
             display(screen)
-        elif lines[i]=="save\n":
-            save_extension(screen,lines[i+1].strip())
-        elif lines[i]=="quit\n":
-            break
+
+        #SAVE
+        elif (lines[i] == "save\n"):
+            image = lines[i+1].split()
+            save_extension(screen, image[0])
+
+        #ANYTHING ELSE
+        else:
+            pass
+
