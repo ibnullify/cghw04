@@ -100,4 +100,5 @@ def parse_file( fname, points, transform, screen, color ):
         
 filename = 'newscript'
 #filename = 'script'
+
 parse_file( filename, edges, transform, screen, color )
